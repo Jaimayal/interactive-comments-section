@@ -1,0 +1,12 @@
+---
+import type { User } from "../types";
+
+const { currentUser }: Record<string, User> = Astro.props;
+---
+<section class="flex flex-col w-full p-8 bg-white">
+    <textarea class="p-4 placeholder:text-grayish-blue border-light-grayish-blue" placeholder="Add a comment..."></textarea>
+    <div class="flex flex-row items-center mt-4 justify-between">
+        <img class="w-10 h-10 mr-3 rounded-full" src={currentUser.image.png} />
+        <button class="rounded-md bg-moderate-blue uppercase text-white py-3 px-6">send</button>
+    </div>
+</section>
