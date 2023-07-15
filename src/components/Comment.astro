@@ -1,0 +1,20 @@
+---
+import type { CommentType } from "../types";
+import CommentReply from "./CommentReply.astro";
+import CommentHeader from "./CommentHeader.astro";
+import CommentFooter from "./CommentFooter.astro";
+const { comment }: Record<string, CommentType> = Astro.props;
+---
+
+<div class="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
+	<CommentHeader
+		image={comment.user.image.png}
+		username={comment.user.username}
+		createdAt={comment.createdAt}
+	/>
+	<main class="mt-4">
+		<p class="text-grayish-blue">{comment.content}</p>
+	</main>
+	<CommentFooter score={comment.score} />
+</div>
+{comment.replies.map((reply) => <CommentReply reply={reply} />)}
