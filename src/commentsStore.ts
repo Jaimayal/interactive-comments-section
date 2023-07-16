@@ -208,5 +208,5 @@ export function deleteComment(commentId: number) {
 		comment.replies = repliesFiltered;
 	});
 
-	$comments.set([...comments]);
+	$comments.set([...commentsFiltered]);
 }

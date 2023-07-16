@@ -1,14 +1,22 @@
 import { useStore } from "@nanostores/react";
-import { $comments, $currentUser, addComment } from "../commentsStore";
+import {
+	$comments,
+	$currentUser,
+	addComment,
+	deleteComment,
+} from "../commentsStore";
 import Comment from "../components/Comment";
 import { useEffect, useState } from "react";
 import type { CommentType } from "../types";
+import DeleteModal from "../components/DeleteModal";
+import { $isModalOpen, $toDeleteId } from "../deleteModalStore";
 function CommentsApp() {
 	const localComments = useStore($comments);
 	const currentUser = useStore($currentUser);
 	const [comments, setComments] = useState<CommentType[]>([]);
 	const [newComment, setNewComment] = useState<string>("");
-
+	const showDeleteModal = useStore($isModalOpen);
+	const toDeleteId = useStore($toDeleteId);
 	useEffect(() => {
 		setComments(localComments);
 	}, [localComments]);
@@ -16,6 +24,10 @@ function CommentsApp() {
 	const onSendCommentClick = () => {
 		setNewComment("");
 		addComment(newComment);
+	};
+
+	const onDeleteConfirmClick = () => {
+		deleteComment(toDeleteId);
 	};
 
 	return (
@@ -45,6 +57,10 @@ function CommentsApp() {
 					</button>
 				</div>
 			</section>
+			<DeleteModal
+				show={showDeleteModal}
+				onConfirmClick={onDeleteConfirmClick}
+			/>
 		</>
 	);
 }

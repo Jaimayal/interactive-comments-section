@@ -1,28 +1,23 @@
 import { useStore } from "@nanostores/react";
 import { useState } from "react";
-import { $currentUser, likeComment, dislikeComment, replyComment } from "../commentsStore";
+import { $currentUser, replyComment } from "../commentsStore";
 import type { CommentType, Reply } from "../types";
 import ScoreButtonGroup from "./ScoreButtonGroup";
 
 interface CommentFooterProps {
 	comment: CommentType | Reply;
+	onLikeClick: () => void;
+	onDislikeClick: () => void;
 }
 
-function CommentFooter({ comment }: CommentFooterProps) {
-	const [score, setScore] = useState(comment.score);
+function CommentFooter({
+	comment,
+	onLikeClick,
+	onDislikeClick,
+}: CommentFooterProps) {
+	const currentUser = useStore($currentUser);
 	const [replying, setReplying] = useState(false);
 	const [reply, setReply] = useState("");
-	const currentUser = useStore($currentUser);
-
-	const onLikeClick = () => {
-		setScore(score + 1);
-		likeComment(comment.id);
-	};
-
-	const onDislikeClick = () => {
-		setScore(score - 1);
-		dislikeComment(comment.id);
-	};
 
 	const onReplyClick = () => {
 		setReplying(!replying);
@@ -39,7 +34,7 @@ function CommentFooter({ comment }: CommentFooterProps) {
 			<>
 				<footer className="flex flex-row mt-4 justify-between">
 					<ScoreButtonGroup
-						score={score}
+						score={comment.score}
 						likeComment={onLikeClick}
 						dislikeComment={onDislikeClick}
 					/>
@@ -90,7 +85,7 @@ function CommentFooter({ comment }: CommentFooterProps) {
 	return (
 		<footer className="flex flex-row mt-4 justify-between">
 			<ScoreButtonGroup
-				score={score}
+				score={comment.score}
 				likeComment={onLikeClick}
 				dislikeComment={onDislikeClick}
 			/>

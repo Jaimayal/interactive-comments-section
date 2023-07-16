@@ -1,7 +1,5 @@
 import type { CommentType } from "../types";
-import CommentFooter from "./CommentFooter";
-import CommentHeader from "./CommentHeader";
-import CommentReply from "./CommentReply";
+import CommentCommon from "./CommentCommon";
 
 interface CommentProps {
 	comment: CommentType;
@@ -10,15 +8,19 @@ interface CommentProps {
 function Comment({ comment }: CommentProps) {
 	return (
 		<>
-			<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
-				<CommentHeader comment={comment} />
-				<main className="mt-4">
-					<p className="text-grayish-blue">{comment.content}</p>
-				</main>
-				<CommentFooter comment={comment} />
-			</div>
+			<CommentCommon comment={comment}>{comment.content}</CommentCommon>
 			{comment.replies.map((reply) => (
-				<CommentReply key={reply.id} reply={reply} />
+				<section
+					key={reply.id}
+					className="pl-6 w-full"
+				>
+					<CommentCommon comment={reply}>
+						<span className="text-moderate-blue font-semibold">
+							@{reply.replyingTo}&nbsp;
+						</span>
+						{reply.content}
+					</CommentCommon>
+				</section>
 			))}
 		</>
 	);
