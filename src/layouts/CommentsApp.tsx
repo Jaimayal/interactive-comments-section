@@ -4,25 +4,18 @@ import Comment from "../components/Comment";
 import { useEffect, useState } from "react";
 import type { CommentType } from "../types";
 function CommentsApp() {
-	const [comments, setComments] = useState<CommentType[]>([]);
 	const localComments = useStore($comments);
-	const [newComment, setNewComment] = useState<string>("");
 	const currentUser = useStore($currentUser);
+	const [comments, setComments] = useState<CommentType[]>([]);
+	const [newComment, setNewComment] = useState<string>("");
 
 	useEffect(() => {
 		setComments(localComments);
-	}, [localComments])
+	}, [localComments]);
 
 	const onSendCommentClick = () => {
-		const comment: CommentType = {
-			id: Math.round(Math.random() * 10000000),
-			content: newComment,
-			user: currentUser,
-			createdAt: "Now",
-			replies: [],
-			score: 0,
-		};
-		addComment(comment);
+		setNewComment("");
+		addComment(newComment);
 	};
 
 	return (
@@ -36,6 +29,7 @@ function CommentsApp() {
 				<textarea
 					className="p-4 placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
 					placeholder="Add a comment..."
+					value={newComment}
 					onChange={(e) => setNewComment(e.target.value)}
 				></textarea>
 				<div className="flex flex-row items-center mt-4 justify-between">

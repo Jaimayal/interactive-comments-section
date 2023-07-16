@@ -75,7 +75,6 @@ const initialCommentsState: CommentType[] = [
 ];
 
 export const $currentUser = atom(initialUserState);
-// export const $comments = deepMap(initialCommentsState);
 export const $comments = persistentAtom<CommentType[]>(
 	"comments",
 	initialCommentsState,
@@ -84,6 +83,7 @@ export const $comments = persistentAtom<CommentType[]>(
 		decode: JSON.parse,
 	}
 );
+
 export function likeComment(commentId: number) {
 	const comments = $comments.get();
 
@@ -103,6 +103,7 @@ export function likeComment(commentId: number) {
 	});
 	$comments.set([...comments]);
 }
+
 export function dislikeComment(commentId: number) {
 	const comments = $comments.get();
 
@@ -122,12 +123,29 @@ export function dislikeComment(commentId: number) {
 	});
 	$comments.set([...comments]);
 }
-export function replyComment(toReply: CommentType | Reply, reply: Reply) {
+
+export function replyComment(
+	toReply: CommentType | Reply,
+	replyContent: string
+) {
+	const finalReply = replyContent.startsWith("@")
+		? replyContent.replace(/@[a-zA-Z0-9]*/, "").trim()
+		: replyContent;
+
+	const commentReply: Reply = {
+		id: Math.round(Math.random() * 10000000),
+		content: finalReply,
+		user: $currentUser.get(),
+		createdAt: "Now",
+		replyingTo: toReply.user.username,
+		score: 0,
+	};
+
 	const comments = $comments.get();
 
 	const comment = comments.find((comment) => comment.id === toReply.id);
 	if (comment) {
-		comment.replies.push(reply);
+		comment.replies.push(commentReply);
 		$comments.set([...comments]);
 		return;
 	}
@@ -137,11 +155,58 @@ export function replyComment(toReply: CommentType | Reply, reply: Reply) {
 			(reply) => reply.id === toReply.id
 		);
 		if (isReply) {
-			comment.replies.push(reply);
+			comment.replies.push(commentReply);
 		}
 	});
 	$comments.set([...comments]);
 }
-export function addComment(comment: CommentType) {
+
+export function addComment(content: string) {
+	const comment: CommentType = {
+		id: Math.round(Math.random() * 10000000),
+		content: content,
+		user: $currentUser.get(),
+		createdAt: "Now",
+		replies: [],
+		score: 0,
+	};
+
 	$comments.set([...$comments.get(), comment]);
+}
+
+export function editComment(commentId: number, content: string) {
+	const comments = $comments.get();
+
+	const comment = comments.find((comment) => comment.id === commentId);
+	if (comment) {
+		comment.content = content;
+		$comments.set([...comments]);
+		return;
+	}
+
+	comments.forEach((comment) => {
+		const reply = comment.replies.find((reply) => reply.id === commentId);
+		if (reply) {
+			reply.content = content;
+		}
+	});
+	$comments.set([...comments]);
+}
+
+export function deleteComment(commentId: number) {
+	const comments = $comments.get();
+
+	const commentsFiltered = comments.filter(
+		(comment) => comment.id !== commentId
+	);
+
+	commentsFiltered.forEach((comment) => {
+		const replies = comment.replies;
+		const repliesFiltered = replies.filter(
+			(reply) => reply.id !== commentId
+		);
+		comment.replies = repliesFiltered;
+	});
+
+	$comments.set([...comments]);
 }

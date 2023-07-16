@@ -29,19 +29,7 @@ function CommentFooter({ comment }: CommentFooterProps) {
 	};
 
 	const onSendReplyClick = () => {
-		const finalReply = reply.startsWith("@")
-			? reply.replace(/@[a-zA-Z0-9]*/, "").trim()
-			: reply;
-
-		const commentReply: Reply = {
-			id: Math.round(Math.random() * 10000000),
-			content: finalReply,
-			user: currentUser,
-			createdAt: "Now",
-			replyingTo: comment.user.username,
-			score: 0,
-		};
-		replyComment(comment, commentReply);
+		replyComment(comment, reply);
 		setReplying(false);
 		setReply("");
 	};
