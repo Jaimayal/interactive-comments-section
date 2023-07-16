@@ -9,7 +9,7 @@ export type User = {
 }
 
 export type Reply = {
-    id: string,
+    id: number,
     content: string,
     createdAt: string,
     score: number,
@@ -18,7 +18,7 @@ export type Reply = {
 }
 
 export type CommentType = {
-    id: string,
+    id: number,
     content: string,
     createdAt: string,
     score: number,

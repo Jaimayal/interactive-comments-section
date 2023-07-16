@@ -1,13 +1,7 @@
 ---
 import "@fontsource-variable/rubik";
-
-import data from "../data.json";
-import AddComment from "../layouts/AddComment.astro";
+import CommentsApp from "../layouts/CommentsApp";
 import Attribution from "../layouts/Attribution.astro";
-import Comments from "../layouts/Comments.astro";
-
-const currentUser = data.currentUser;
-const comments = data.comments;
 ---
 
 <style is:global>
@@ -26,8 +20,7 @@ const comments = data.comments;
 	</head>
 	<body>
 		<main class="flex flex-col h-full bg-slate-200">
-			<Comments comments={comments} />
-			<AddComment currentUser={currentUser} />
+			<CommentsApp client:load />
 			<Attribution />
 		</main>
 	</body>

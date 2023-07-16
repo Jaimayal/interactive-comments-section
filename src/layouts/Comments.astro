@@ -1,9 +1,0 @@
----
-import Comment from "../components/Comment.astro";
-import type { CommentType } from "../types";
-const { comments }: Record<string, CommentType[]> = Astro.props;
----
-
-<main class="flex flex-col items-center justify-center flex-grow">
-    {comments.map((comment) => <Comment comment={comment} />)}
-</main>
