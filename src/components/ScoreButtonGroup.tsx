@@ -1,15 +1,24 @@
+import { dislikeComment, likeComment } from "../commentsStore";
+
 interface ScoreButtonGroupProps {
     score: number,
-    likeComment: () => void
-    dislikeComment: () => void 
+    commentId: number
 }
 
-function ScoreButtonGroup({ score, likeComment, dislikeComment }: ScoreButtonGroupProps) {
+function ScoreButtonGroup({ commentId, score }: ScoreButtonGroupProps) {
+	const onLikeClick = () => {
+		likeComment(commentId);
+	};
+
+	const onDislikeClick = () => {
+		dislikeComment(commentId);
+	};
+	
 	return (
 		<div className="grid grid-cols-3 justify-items-center items-center gap-4 bg-ultra-light-gray p-2">
 			<button
 				className="group text-light-grayish-blue hover:text-moderate-blue"
-				onClick={likeComment}
+				onClick={onLikeClick}
 			>
 				<svg width="11" height="11" xmlns="http://www.w3.org/2000/svg">
 					<path
@@ -22,7 +31,7 @@ function ScoreButtonGroup({ score, likeComment, dislikeComment }: ScoreButtonGro
 			<p className="text-moderate-blue font-semibold">{score}</p>
 			<button
 				className="group text-light-grayish-blue hover:text-moderate-blue py-1"
-				onClick={dislikeComment}
+				onClick={onDislikeClick}
 			>
 				<svg width="11" height="3" xmlns="http://www.w3.org/2000/svg">
 					<path

@@ -1,26 +1,29 @@
+import { useStore } from "@nanostores/react";
+import { $currentUser } from "../commentsStore";
 import type { CommentType } from "../types";
-import CommentCommon from "./CommentCommon";
+import CommentCurrentUser from "./CommentCurrentUser";
+import CommentOtherUser from "./CommentOtherUser";
+import Reply from "./Reply";
 
 interface CommentProps {
 	comment: CommentType;
 }
 
 function Comment({ comment }: CommentProps) {
+	const currentUser = useStore($currentUser);
+
+	const commentComponent =
+		currentUser.username === comment.user.username ? (
+			<CommentCurrentUser comment={comment} />
+		) : (
+			<CommentOtherUser comment={comment} />
+		);
+
 	return (
 		<>
-			<CommentCommon comment={comment}>{comment.content}</CommentCommon>
+			{commentComponent}
 			{comment.replies.map((reply) => (
-				<section
-					key={reply.id}
-					className="pl-6 w-full"
-				>
-					<CommentCommon comment={reply}>
-						<span className="text-moderate-blue font-semibold">
-							@{reply.replyingTo}&nbsp;
-						</span>
-						{reply.content}
-					</CommentCommon>
-				</section>
+				<Reply key={reply.id} reply={reply} />
 			))}
 		</>
 	);
