@@ -10,10 +10,19 @@ import CommentFooter from "./CommentFooter";
 import CommentHeader from "./CommentHeader";
 import CommentUserFooter from "./CommentUserFooter";
 import type { CommentType, Reply } from "../types";
-import { openModal } from "../deleteModalStore"
-function CommentCommon({ comment, children }: { comment: CommentType | Reply, children: React.ReactNode }) {
+import { openModal } from "../deleteModalStore";
+import { useState } from "react";
+import CommentSaveEditFooter from "./CommentSaveEditFooter";
+function CommentCommon({
+	comment,
+	children,
+}: {
+	comment: CommentType | Reply;
+	children: React.ReactNode;
+}) {
 	const currentUser = useStore($currentUser);
-
+	const [isEditing, setIsEditing] = useState(false);
+	const [newContent, setNewContent] = useState("");
 	const onLikeClick = () => {
 		likeComment(comment.id);
 	};
@@ -23,20 +32,41 @@ function CommentCommon({ comment, children }: { comment: CommentType | Reply, ch
 	};
 
 	const onDeleteClick = () => {
-        openModal(comment.id);
+		openModal(comment.id);
 	};
 
-	const onSaveEditClick = (message: string) => {
-		editComment(comment.id, message);
+	const onSaveEditClick = () => {
+		editComment(comment.id, newContent);
+		setIsEditing(false);
 	};
-    
+
+	if (isEditing) {
+		return (
+			<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
+				<CommentHeader comment={comment} />
+				<main className="mt-4">
+					<textarea
+						className="w-full placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
+						placeholder="Add a comment..."
+						onChange={(e) => setNewContent(e.target.value)}
+						defaultValue={comment.content}
+					></textarea>
+				</main>
+				<CommentSaveEditFooter
+					comment={comment}
+					onSaveEdit={onSaveEditClick}
+					onDislikeClick={onDislikeClick}
+					onLikeClick={onLikeClick}
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
 			<CommentHeader comment={comment} />
 			<main className="mt-4">
-				<p>
-                    {children}
-                </p>
+				<p>{children}</p>
 			</main>
 			{currentUser.username === comment.user.username ? (
 				<CommentUserFooter
@@ -44,7 +74,7 @@ function CommentCommon({ comment, children }: { comment: CommentType | Reply, ch
 					onDislikeClick={onDislikeClick}
 					onLikeClick={onLikeClick}
 					onDeleteClick={onDeleteClick}
-					onSaveEditClick={onSaveEditClick}
+					setEditing={setIsEditing}
 				/>
 			) : (
 				<CommentFooter

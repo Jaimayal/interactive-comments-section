@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { CommentType, Reply } from "../types";
 import ScoreButtonGroup from "./ScoreButtonGroup";
 
@@ -6,14 +7,14 @@ interface CommenteUserFooterProps {
 	onLikeClick: () => void;
 	onDislikeClick: () => void;
 	onDeleteClick: () => void;
-	onSaveEditClick: (messaeg: string) => void;
+	setEditing: (isEditing: boolean) => void;
 }
 function CommenteUserFooter({
 	comment,
 	onLikeClick,
 	onDislikeClick,
     onDeleteClick,
-    onSaveEditClick,
+    setEditing,
 }: CommenteUserFooterProps) {
 	return (
 		<footer className="flex flex-row mt-4 justify-between">
@@ -38,7 +39,7 @@ function CommenteUserFooter({
 					</svg>
 					<span className="select-none">Delete</span>
 				</button>
-				<button className="group text-moderate-blue font-semibold hover:text-light-grayish-blue" onClick={() => console.log("Edit clicked")}>
+				<button className="group text-moderate-blue font-semibold hover:text-light-grayish-blue" onClick={() => setEditing(true)}>
 					<svg
 						width="14"
 						height="14"
