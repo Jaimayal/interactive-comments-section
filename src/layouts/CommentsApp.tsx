@@ -38,7 +38,7 @@ function CommentsApp() {
 						<Comment key={comment.id} comment={comment} />
 					))}
 				</main>
-				<section className="flex flex-col w-full p-8 bg-white shadow-lg">
+				<section className="flex flex-col w-full p-8 mt-4 bg-white shadow-lg">
 					<textarea
 						className="p-4 placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
 						placeholder="Add a comment..."

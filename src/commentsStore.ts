@@ -15,7 +15,7 @@ const initialCommentsState: CommentType[] = [
 		id: 1,
 		content:
 			"Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.",
-		createdAt: "1 month ago",
+		createdAt: "2023-06-13T23:11:48+0000",
 		score: 12,
 		user: {
 			image: {
@@ -30,7 +30,7 @@ const initialCommentsState: CommentType[] = [
 		id: 2,
 		content:
 			"Woah, your project looks awesome! How long have you been coding for? I'm still new, but think I want to dive into React as well soon. Perhaps you can give me an insight on where I can learn React? Thanks!",
-		createdAt: "2 weeks ago",
+		createdAt: "2023-07-03T23:11:48+0000",
 		score: 5,
 		user: {
 			image: {
@@ -44,7 +44,7 @@ const initialCommentsState: CommentType[] = [
 				id: 3,
 				content:
 					"If you're still new, I'd recommend focusing on the fundamentals of HTML, CSS, and JS before considering React. It's very tempting to jump ahead but lay a solid foundation first.",
-				createdAt: "1 week ago",
+				createdAt: "2023-07-10T23:11:48+0000",
 				score: 4,
 				replyingTo: "maxblagun",
 				user: {
@@ -59,7 +59,7 @@ const initialCommentsState: CommentType[] = [
 				id: 4,
 				content:
 					"I couldn't agree more with this. Everything moves so fast and it always seems like everyone knows the newest library/framework. But the fundamentals are what stay constant.",
-				createdAt: "2 days ago",
+				createdAt: "2023-07-13T23:11:48+0000",
 				score: 2,
 				replyingTo: "ramsesmiron",
 				user: {
@@ -136,7 +136,7 @@ export function replyComment(
 		id: Math.round(Math.random() * 10000000),
 		content: finalReply,
 		user: $currentUser.get(),
-		createdAt: "Now",
+		createdAt: new Date().toISOString(),
 		replyingTo: toReply.user.username,
 		score: 0,
 	};
@@ -166,7 +166,7 @@ export function addComment(content: string) {
 		id: Math.round(Math.random() * 10000000),
 		content: content,
 		user: $currentUser.get(),
-		createdAt: "Now",
+		createdAt: new Date().toISOString(),
 		replies: [],
 		score: 0,
 	};

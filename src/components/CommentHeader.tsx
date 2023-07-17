@@ -2,6 +2,8 @@ import { useStore } from "@nanostores/react";
 import { $currentUser } from "../commentsStore";
 import type { CommentType, Reply } from "../types";
 import CrudButtonGroup from "./CrudButtonGroup";
+import { useRef } from "react";
+import usePrettyDate from "../hooks/usePrettyDate";
 
 interface CommentHeaderProps {
 	comment: CommentType | Reply;
@@ -10,6 +12,7 @@ interface CommentHeaderProps {
 
 function CommentHeader({ comment, buttonGroup }: CommentHeaderProps) {
 	const currentUser = useStore($currentUser);
+	const date = usePrettyDate(comment.createdAt)
 
 	if (currentUser.username === comment.user.username) {
 		return (
@@ -24,7 +27,7 @@ function CommentHeader({ comment, buttonGroup }: CommentHeaderProps) {
 				<h6 className="px-2 mr-3 text-white lowercase rounded-sm bg-moderate-blue">
 					you
 				</h6>
-				<p className="text-gray-500">{comment.createdAt}</p>
+				<p className="text-gray-500">{date}</p>
 				<div className="hidden md:block md:flex-grow md:justify-end">
 					{buttonGroup}
 				</div>
@@ -41,7 +44,7 @@ function CommentHeader({ comment, buttonGroup }: CommentHeaderProps) {
 			<h4 className="mr-3 font-bold text-black">
 				{comment.user.username}
 			</h4>
-			<p className="text-gray-500">{comment.createdAt}</p>
+			<p className="text-gray-500">{date}</p>
 			<div className="hidden md:block md:flex-grow md:justify-end">
 				{buttonGroup}
 			</div>
