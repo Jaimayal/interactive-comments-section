@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { editComment } from "../commentsStore";
 import { openModal } from "../deleteModalStore";
 import type { CommentType, Reply } from "../types";
@@ -9,15 +9,45 @@ import ScoreButtonGroup from "./ScoreButtonGroup";
 function CommentCurrentUser({ comment }: { comment: CommentType | Reply }) {
 	const [isEditing, setIsEditing] = useState(false);
 	const [newContent, setNewContent] = useState("");
+	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+	useEffect(() => {
+		if (textAreaRef.current) {
+			textAreaRef.current.style.height = "0px";
+			const scrollHeight = textAreaRef.current.scrollHeight;
+			textAreaRef.current.style.height = scrollHeight + "px";
+		}
+	}, [textAreaRef.current, newContent]);
 
 	const onDeleteClick = () => {
 		openModal(comment.id);
 	};
 
+	const onEditClick = () => {
+		setIsEditing(true);
+		setNewContent(comment.content);
+	};
+
 	const onSaveEditClick = () => {
 		editComment(comment.id, newContent);
 		setIsEditing(false);
+		setNewContent("");
 	};
+
+	let content = null;
+	if ((comment as Reply).replyingTo !== undefined) {
+		const reply = comment as Reply;
+		content = (
+			<>
+				<span className="text-moderate-blue font-bold">
+					@{reply.replyingTo}&nbsp;
+				</span>
+				{reply.content}
+			</>
+		);
+	} else {
+		content = <>{comment.content}</>;
+	}
 
 	if (isEditing) {
 		return (
@@ -29,6 +59,7 @@ function CommentCurrentUser({ comment }: { comment: CommentType | Reply }) {
 						placeholder="Add a comment..."
 						onChange={(e) => setNewContent(e.target.value)}
 						defaultValue={comment.content}
+						ref={textAreaRef}
 					></textarea>
 				</main>
 				<footer className="flex flex-row mt-4 justify-between">
@@ -52,9 +83,7 @@ function CommentCurrentUser({ comment }: { comment: CommentType | Reply }) {
 	return (
 		<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
 			<CommentHeader comment={comment} />
-			<main className="mt-4">
-				<p>{comment.content}</p>
-			</main>
+			<main className="mt-4">{content}</main>
 			<footer className="flex flex-row mt-4 justify-between">
 				<ScoreButtonGroup
 					score={comment.score}
@@ -62,7 +91,7 @@ function CommentCurrentUser({ comment }: { comment: CommentType | Reply }) {
 				/>
 				<CrudButtonGroup
 					onDeleteClick={onDeleteClick}
-					onEditClick={() => setIsEditing(true)}
+					onEditClick={onEditClick}
 				/>
 			</footer>
 		</div>

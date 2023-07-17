@@ -21,13 +21,26 @@ function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 		setReply("");
 	};
 
+	let content = null;
+	if ((comment as Reply).replyingTo !== undefined) {
+		const reply = comment as Reply;
+		content = (
+			<>
+				<span className="text-moderate-blue font-bold">
+					@{reply.replyingTo}&nbsp;
+				</span>
+				{reply.content}
+			</>
+		);
+	} else {
+		content = <>{comment.content}</>;
+	}
+
 	if (isReplying) {
 		return (
 			<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
 				<CommentHeader comment={comment} />
-				<main className="mt-4">
-					<p>{comment.content}</p>
-				</main>
+				<main className="mt-4">{content}</main>
 				<footer className="flex flex-row mt-4 justify-between">
 					<ScoreButtonGroup
 						score={comment.score}
@@ -80,9 +93,7 @@ function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 	return (
 		<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
 			<CommentHeader comment={comment} />
-			<main className="mt-4">
-				<p>{comment.content}</p>
-			</main>
+			<main className="mt-4">{content}</main>
 			<footer className="flex flex-row mt-4 justify-between">
 				<ScoreButtonGroup
 					score={comment.score}

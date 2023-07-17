@@ -7,7 +7,7 @@ import CommentOtherUser from "./CommentOtherUser";
 function Reply({ reply }: { reply: Reply }) {
 	const currentUser = useStore($currentUser);
 
-    const replyComponent =
+	const replyComponent =
 		currentUser.username === reply.user.username ? (
 			<CommentCurrentUser comment={reply} />
 		) : (
@@ -15,8 +15,11 @@ function Reply({ reply }: { reply: Reply }) {
 		);
 
 	return (
-		<section className="pl-6 w-full">
-			{replyComponent}
+		<section
+			className="ml-3 border-l-gray-200 border-l-2"
+			style={{ width: "calc(100% - 0.75rem)" }}
+		>
+			<div className="pl-2">{replyComponent}</div>
 		</section>
 	);
 }
