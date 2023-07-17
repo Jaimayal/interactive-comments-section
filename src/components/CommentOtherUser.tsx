@@ -16,8 +16,6 @@ function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 		setIsReplying(true);
 	};
 
-	console.log(isReplying);
-
 	const onSendReplyClick = () => {
 		replyComment(comment, reply);
 		setIsReplying(false);

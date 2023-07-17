@@ -17,7 +17,6 @@ function CommentCommon({
 	mainContent,
 	children,
 }: CommentCommonProps) {
-	console.log(headerButtonGroup);
 	return (
 		<div className="flex flex-col w-full p-8 break-words bg-white border-gray-300 shadow-md">
 			<div className="flex flex-row">
