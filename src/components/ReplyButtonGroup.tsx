@@ -1,20 +1,12 @@
-import { useStore } from "@nanostores/react";
-import { useState } from "react";
-import { $currentUser, replyComment } from "../commentsStore";
-import type { CommentType, Reply } from "../types";
-import ScoreButtonGroup from "./ScoreButtonGroup";
-
 interface ReplyButtonGroupProps {
 	onReplyClick: () => void;
 }
 
-function ReplyButtonGroup({
-	onReplyClick,
-}: ReplyButtonGroupProps) {
+function ReplyButtonGroup({ onReplyClick }: ReplyButtonGroupProps) {
 	return (
 		<div className="flex items-center justify-end">
 			<button
-				className="group text-moderate-blue font-semibold hover:text-light-grayish-blue"
+				className="font-semibold group text-moderate-blue hover:text-light-grayish-blue"
 				onClick={onReplyClick}
 			>
 				<svg

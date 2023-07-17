@@ -5,6 +5,7 @@ import ScoreButtonGroup from "./ScoreButtonGroup";
 import { $currentUser, replyComment } from "../commentsStore";
 import { useState } from "react";
 import type { CommentType, Reply } from "../types";
+import CommentCommon from "./CommentCommon";
 
 function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 	const currentUser = useStore($currentUser);
@@ -12,8 +13,10 @@ function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 	const [reply, setReply] = useState("");
 
 	const onReplyClick = () => {
-		setIsReplying(!isReplying);
+		setIsReplying(true);
 	};
+
+	console.log(isReplying);
 
 	const onSendReplyClick = () => {
 		replyComment(comment, reply);
@@ -26,7 +29,7 @@ function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 		const reply = comment as Reply;
 		content = (
 			<>
-				<span className="text-moderate-blue font-bold">
+				<span className="font-bold text-moderate-blue">
 					@{reply.replyingTo}&nbsp;
 				</span>
 				{reply.content}
@@ -38,17 +41,15 @@ function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 
 	if (isReplying) {
 		return (
-			<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
-				<CommentHeader comment={comment} />
-				<main className="mt-4">{content}</main>
-				<footer className="flex flex-row mt-4 justify-between">
-					<ScoreButtonGroup
-						score={comment.score}
-						commentId={comment.id}
-					/>
-					<div className="flex items-center justify-end">
+			<CommentCommon
+				comment={comment}
+				headerButtonGroup={
+					<ReplyButtonGroup onReplyClick={onReplyClick} />
+				}
+				footerButtonGroup={
+					<>
 						<button
-							className="group text-light-grayish-blue font-semibold"
+							className="font-semibold group text-light-grayish-blue"
 							onClick={onReplyClick}
 						>
 							<svg
@@ -64,44 +65,41 @@ function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 							</svg>
 							<span className="select-none">Reply</span>
 						</button>
-					</div>
-				</footer>
-				<section className="flex flex-col w-full bg-white mt-2">
+					</>
+				}
+				mainContent={<>{content}</>}
+			>
+				<section className="flex flex-col w-full mt-2 bg-white">
 					<textarea
 						className="p-4 placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
 						placeholder="Add a comment..."
 						onChange={(e) => setReply(e.target.value)}
 						defaultValue={`@${comment.user.username} `}
 					></textarea>
-					<div className="flex flex-row items-center mt-4 justify-between">
+					<div className="flex flex-row items-center justify-between mt-4">
 						<img
 							className="w-10 h-10 mr-3 rounded-full"
 							src={currentUser.image.png}
 						/>
 						<button
-							className="rounded-md bg-moderate-blue uppercase text-white py-3 px-6 hover:bg-light-grayish-blue"
+							className="px-6 py-3 text-white uppercase rounded-md bg-moderate-blue hover:bg-light-grayish-blue"
 							onClick={onSendReplyClick}
 						>
 							send
 						</button>
 					</div>
 				</section>
-			</div>
+			</CommentCommon>
 		);
 	}
 
 	return (
-		<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
-			<CommentHeader comment={comment} />
-			<main className="mt-4">{content}</main>
-			<footer className="flex flex-row mt-4 justify-between">
-				<ScoreButtonGroup
-					score={comment.score}
-					commentId={comment.id}
-				/>
-				<ReplyButtonGroup onReplyClick={onReplyClick} />
-			</footer>
-		</div>
+		<CommentCommon
+			comment={comment}
+			headerButtonGroup={<ReplyButtonGroup onReplyClick={onReplyClick} />}
+			footerButtonGroup={<ReplyButtonGroup onReplyClick={onReplyClick} />}
+			mainContent={<>{content}</>}
+		/>
 	);
 }
 

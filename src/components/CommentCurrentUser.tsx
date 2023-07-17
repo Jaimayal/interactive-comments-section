@@ -5,6 +5,7 @@ import type { CommentType, Reply } from "../types";
 import CommentHeader from "./CommentHeader";
 import CrudButtonGroup from "./CrudButtonGroup";
 import ScoreButtonGroup from "./ScoreButtonGroup";
+import CommentCommon from "./CommentCommon";
 
 function CommentCurrentUser({ comment }: { comment: CommentType | Reply }) {
 	const [isEditing, setIsEditing] = useState(false);
@@ -39,7 +40,7 @@ function CommentCurrentUser({ comment }: { comment: CommentType | Reply }) {
 		const reply = comment as Reply;
 		content = (
 			<>
-				<span className="text-moderate-blue font-bold">
+				<span className="font-bold text-moderate-blue">
 					@{reply.replyingTo}&nbsp;
 				</span>
 				{reply.content}
@@ -51,50 +52,62 @@ function CommentCurrentUser({ comment }: { comment: CommentType | Reply }) {
 
 	if (isEditing) {
 		return (
-			<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
-				<CommentHeader comment={comment} />
-				<main className="mt-4">
-					<textarea
-						className="w-full placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
-						placeholder="Add a comment..."
-						onChange={(e) => setNewContent(e.target.value)}
-						defaultValue={comment.content}
-						ref={textAreaRef}
-					></textarea>
-				</main>
-				<footer className="flex flex-row mt-4 justify-between">
-					<ScoreButtonGroup
-						score={comment.score}
-						commentId={comment.id}
+			<CommentCommon
+				comment={comment}
+				headerButtonGroup={
+					<CrudButtonGroup
+						onDeleteClick={onDeleteClick}
+						onEditClick={onEditClick}
 					/>
-					<div className="flex items-center justify-end gap-4">
-						<button
-							className="rounded-md bg-moderate-blue uppercase text-white py-3 px-6 hover:bg-light-grayish-blue"
-							onClick={() => onSaveEditClick()}
-						>
-							<span className="select-none">Update</span>
-						</button>
-					</div>
-				</footer>
-			</div>
+				}
+				footerButtonGroup={
+					<button
+						className="px-6 py-3 text-white uppercase rounded-md bg-moderate-blue hover:bg-light-grayish-blue"
+						onClick={() => onSaveEditClick()}
+					>
+						<span className="select-none">Update</span>
+					</button>
+				}
+				mainContent={
+					<>
+						<textarea
+							className="w-full placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
+							placeholder="Add a comment..."
+							onChange={(e) => setNewContent(e.target.value)}
+							defaultValue={comment.content}
+							ref={textAreaRef}
+						></textarea>
+						<div className="hidden mt-4 md:block text-end">
+							<button
+								className="px-6 py-3 text-white uppercase rounded-md bg-moderate-blue hover:bg-light-grayish-blue"
+								onClick={() => onSaveEditClick()}
+							>
+								<span className="select-none">Update</span>
+							</button>
+						</div>
+					</>
+				}
+			/>
 		);
 	}
 
 	return (
-		<div className="flex flex-col w-full p-8 bg-white border-gray-300 shadow-md">
-			<CommentHeader comment={comment} />
-			<main className="mt-4">{content}</main>
-			<footer className="flex flex-row mt-4 justify-between">
-				<ScoreButtonGroup
-					score={comment.score}
-					commentId={comment.id}
-				/>
+		<CommentCommon
+			comment={comment}
+			headerButtonGroup={
 				<CrudButtonGroup
 					onDeleteClick={onDeleteClick}
 					onEditClick={onEditClick}
 				/>
-			</footer>
-		</div>
+			}
+			footerButtonGroup={
+				<CrudButtonGroup
+					onDeleteClick={onDeleteClick}
+					onEditClick={onEditClick}
+				/>
+			}
+			mainContent={<>{content}</>}
+		/>
 	);
 }
 

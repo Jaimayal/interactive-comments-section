@@ -17,14 +17,18 @@ function Comment({ comment }: CommentProps) {
 			<CommentCurrentUser comment={comment} />
 		) : (
 			<CommentOtherUser comment={comment} />
-		);
+		)
 
 	return (
 		<>
 			{commentComponent}
-			{comment.replies.map((reply) => (
-				<Reply key={reply.id} reply={reply} />
-			))}
+			<section
+				className="flex flex-col ml-3 border-l-gray-300 border-l-2 md:ml-6 md:gap-6"
+			>
+				{comment.replies.map((reply) => (
+					<Reply key={reply.id} reply={reply} />
+				))}
+			</section>
 		</>
 	);
 }

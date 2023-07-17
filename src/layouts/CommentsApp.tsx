@@ -32,31 +32,33 @@ function CommentsApp() {
 
 	return (
 		<>
-			<main className="flex flex-col items-center justify-center flex-grow">
-				{comments.map((comment) => (
-					<Comment key={comment.id} comment={comment} />
-				))}
+			<main className="max-w-3xl mx-auto xl:max-w-5xl">
+				<main className="flex flex-col items-center justify-center flex-grow md:gap-y-4">
+					{comments.map((comment) => (
+						<Comment key={comment.id} comment={comment} />
+					))}
+				</main>
+				<section className="flex flex-col w-full p-8 bg-white shadow-lg">
+					<textarea
+						className="p-4 placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
+						placeholder="Add a comment..."
+						value={newComment}
+						onChange={(e) => setNewComment(e.target.value)}
+					></textarea>
+					<div className="flex flex-row items-center justify-between mt-4">
+						<img
+							className="w-10 h-10 mr-3 rounded-full"
+							src={currentUser.image.png}
+						/>
+						<button
+							className="px-6 py-3 text-white uppercase rounded-md bg-moderate-blue hover:bg-light-grayish-blue"
+							onClick={onSendCommentClick}
+						>
+							send
+						</button>
+					</div>
+				</section>
 			</main>
-			<section className="flex flex-col w-full p-8 bg-white">
-				<textarea
-					className="p-4 placeholder:text-grayish-blue border-light-grayish-blue focus-visible:outline-moderate-blue focus-visible:outline-1"
-					placeholder="Add a comment..."
-					value={newComment}
-					onChange={(e) => setNewComment(e.target.value)}
-				></textarea>
-				<div className="flex flex-row items-center mt-4 justify-between">
-					<img
-						className="w-10 h-10 mr-3 rounded-full"
-						src={currentUser.image.png}
-					/>
-					<button
-						className="rounded-md bg-moderate-blue uppercase text-white py-3 px-6 hover:bg-light-grayish-blue"
-						onClick={onSendCommentClick}
-					>
-						send
-					</button>
-				</div>
-			</section>
 			<DeleteModal
 				show={showDeleteModal}
 				onConfirmClick={onDeleteConfirmClick}

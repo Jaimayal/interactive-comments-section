@@ -15,7 +15,7 @@ function ScoreButtonGroup({ commentId, score }: ScoreButtonGroupProps) {
 	};
 	
 	return (
-		<div className="grid grid-cols-3 justify-items-center items-center gap-4 bg-ultra-light-gray p-2">
+		<div className="grid grid-cols-3 justify-items-center items-center gap-4 bg-ultra-light-gray p-2 md:grid-cols-1 md:grid-rows-3">
 			<button
 				className="group text-light-grayish-blue hover:text-moderate-blue"
 				onClick={onLikeClick}

@@ -15,12 +15,7 @@ function Reply({ reply }: { reply: Reply }) {
 		);
 
 	return (
-		<section
-			className="ml-3 border-l-gray-200 border-l-2"
-			style={{ width: "calc(100% - 0.75rem)" }}
-		>
-			<div className="pl-2">{replyComponent}</div>
-		</section>
+		<div className="pl-3 md:pl-6">{replyComponent}</div>
 	);
 }
 

@@ -1,12 +1,14 @@
 import { useStore } from "@nanostores/react";
 import { $currentUser } from "../commentsStore";
 import type { CommentType, Reply } from "../types";
+import CrudButtonGroup from "./CrudButtonGroup";
 
 interface CommentHeaderProps {
 	comment: CommentType | Reply;
+	buttonGroup: React.ReactNode;
 }
 
-function CommentHeader({ comment }: CommentHeaderProps) {
+function CommentHeader({ comment, buttonGroup }: CommentHeaderProps) {
 	const currentUser = useStore($currentUser);
 
 	if (currentUser.username === comment.user.username) {
@@ -19,10 +21,13 @@ function CommentHeader({ comment }: CommentHeaderProps) {
 				<h4 className="mr-3 font-bold text-black">
 					{comment.user.username}
 				</h4>
-				<h6 className="px-2 mr-3 rounded-sm lowercase bg-moderate-blue text-white">
+				<h6 className="px-2 mr-3 text-white lowercase rounded-sm bg-moderate-blue">
 					you
 				</h6>
 				<p className="text-gray-500">{comment.createdAt}</p>
+				<div className="hidden md:block md:flex-grow md:justify-end">
+					{buttonGroup}
+				</div>
 			</header>
 		);
 	}
@@ -37,6 +42,9 @@ function CommentHeader({ comment }: CommentHeaderProps) {
 				{comment.user.username}
 			</h4>
 			<p className="text-gray-500">{comment.createdAt}</p>
+			<div className="hidden md:block md:flex-grow md:justify-end">
+				{buttonGroup}
+			</div>
 		</header>
 	);
 }
