@@ -1,11 +1,9 @@
 import { useStore } from "@nanostores/react";
-import CommentHeader from "./CommentHeader";
-import ReplyButtonGroup from "./ReplyButtonGroup";
-import ScoreButtonGroup from "./ScoreButtonGroup";
-import { $currentUser, replyComment } from "../commentsStore";
 import { useState } from "react";
+import { $currentUser, replyComment } from "../commentsStore";
 import type { CommentType, Reply } from "../types";
 import CommentCommon from "./CommentCommon";
+import ReplyButtonGroup from "./ReplyButtonGroup";
 
 function CommentOtherUser({ comment }: { comment: CommentType | Reply }) {
 	const currentUser = useStore($currentUser);
